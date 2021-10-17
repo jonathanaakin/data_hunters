@@ -54,7 +54,8 @@ discussion before making the pull request.
     help.
 10. Commit the changes made in the git tab of RStudio.
 11. Run `usethis::pr_push()` to submit the pull request. This will open a new tab in your browser with a pull request form filled out in GitHub. Submit the request by pressing the green "Create pull request" button. After the request had been merged, run `usethis::pr_finish()`.
-12. Please DO NOT edit the description or namespace files.
+12. Once the PR is finished, write a short blog post about the data set for future publication on the OpenIntro blog. See an example [here](https://www.openintro.org/blog/article/2021-10-03-data-set-fatal_police_shootings/).
+13. Please DO NOT edit the description or namespace files.
 
 # Getting GitHub and RStudio to Sync
 ------------------------------------
