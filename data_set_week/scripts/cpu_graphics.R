@@ -4,27 +4,55 @@ library(stringr)
 library(lubridate)
 library(forcats)
 library(tidyr)
-         
-plot_data <- cpu %>% 
-  mutate(level = case_when(
-    str_detect(name, "Core i3") == TRUE ~ "three", 
-    str_detect(name, "Ryzen 3") == TRUE ~ "three",
-    str_detect(name, "Core i5") == TRUE ~ "five",
-    str_detect(name, "Ryzen 5") == TRUE ~ "five",
-    str_detect(name, "Core i7") == TRUE ~ "seven",
-    str_detect(name, "Ryzen 7") == TRUE ~ "seven"
-  )) %>% 
-  type.convert(as.is = FALSE) %>% 
-  filter(!is.na(level))%>%
-  mutate(level = fct_relevel(level, c("three", "five", "seven"))) %>% 
-  separate(released, into = c("year", "month", "day"), sep = "-") %>% 
-  filter(as.numeric(year) >= 2017)
 
-ggplot(plot_data, aes(level, base_clock, color = level))+
-  geom_boxplot()+
-  facet_wrap(~company)+
-  stat_summary(fun = "mean", geom = "point", color = "black")
+#-------------------------------------------------------------------------------
 
-ggplot(plot_data, aes(base_clock, boost_clock, color = level, size = cores))+
-  geom_point()+
-  facet_wrap(~company+level)
+core_i7 <- cpu %>% 
+  filter(str_detect(name, "Core i7")==TRUE) %>% 
+  separate(name, into = c("series", "gen"), sep = "-") %>% 
+  separate(gen, into = c("model", "suffix"), sep = "(?<=[0-9])(?=[A-Za-z])") %>%
+  mutate(gen = case_when(
+    str_detect(model, "[:digit:]{3}") ~ "First",
+    str_detect(model, "^2") ~ "Second",
+    str_detect(model, "^3") ~ "Third",
+    str_detect(model, "^4") ~ "Fourth",
+    str_detect(model, "^5") ~ "Fifth",
+    str_detect(model, "^6") ~ "Sixth",
+    str_detect(model, "^7") ~ "Seventh",
+    str_detect(model, "^8") ~ "Eighth",
+    str_detect(model, "^9") ~ "Ninth",
+    str_detect(model, "^10") ~ "Tenth"
+  ),
+  platform = case_when(
+    str_detect(suffix, "U$") == TRUE ~ "Mobile",
+    str_detect(suffix, "H$") == TRUE ~ "Mobile",
+    str_detect(suffix, "H[:upper:]$") == TRUE ~ "Mobile",
+    str_detect(suffix, "Y$") == TRUE ~ "Mobile",
+    str_detect(suffix, "M$") == TRUE ~ "Mobile",
+    str_detect(suffix, "MQ$") == TRUE ~ "Mobile",
+    str_detect(suffix, "MX$") == TRUE ~ "Mobile",
+    str_detect(suffix, "EQ$") == TRUE ~ "Mobile",
+    str_detect(suffix, "G[:digit:]$") == TRUE ~ "Mobile",
+    TRUE ~ "Desktop"
+    )) %>% 
+  mutate(gen = fct_relevel(gen, c("First", "Second", "Third" ,"Fourth", "Fifth",
+                                  "Sixth", "Seventh", "Eighth", "Ninth","Tenth"
+                                  )))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
