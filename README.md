@@ -12,7 +12,7 @@ Our role is to collect and cultivate supplemental data sets for use in the `open
 --------------
 We will follow the process for adding new data outlined below and modified from the `openintro` package.
 
-If you are a better visual learner, there is a screencast linked at the bottom of this page.
+If you are a better visual learner, there is a screencast linked at the bottom of this page. Those new to GitHub and/or contributing to open source projects via on GitHub may wish to complete [this tutorial](https://npaterno.github.io/left_coast_stats/open_source_workflow.html) to get more comforable with the general process. 
  
 The following steps use the **devtools** and **usethis** packages for
 various steps. We recommend using this process when suggesting new
