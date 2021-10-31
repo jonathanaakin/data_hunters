@@ -21,4 +21,5 @@ ggplot(plot_data, aes(year, mean_era, color = league_winner))+
 
 ggsave(here::here("data_set_week/images/mlb_plot.png"))
 
+
   
