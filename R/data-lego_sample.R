@@ -19,6 +19,7 @@
 #'   \item{packaging}{Type of packaging: bag, box, etc.}
 #'   \item{weight}{Weight of the set of LEGOS in pounds and kilograms.}
 #'   \item{unique_pieces}{Number of pieces classified as unique in the instruction manual.}
+#'   \item{availability}{Where can it be purchased, retail, only from LEGO, etc.}
 #'   \item{size}{Size of the lego pieces: Large if safe for small children and Small for older children.}
 #'   
 #' }
@@ -37,7 +38,7 @@
 #'     title = "Amazon Price vs # of Pieces in Lego Sets"
 #' )
 #'
-#' @source [Peterson, A. D., & Ziegler, L. (2021). Building a multiple linear regression model with LEGO brick data. Journal of Statistics and Data Science Education, 29(3),1-7. doi.org/10.1080/26939169.2021.1946450  ](doi.org/10.1080/26939169.2021.1946450)
+#' @source [Peterson, A. D., & Ziegler, L. (2021). Building a multiple linear regression model with LEGO brick data. Journal of Statistics and Data Science Education, 29(3),1-7. doi.org/10.1080/26939169.2021.1946450  ](https://www.tandfonline.com/doi/full/10.1080/26939169.2021.1946450)
 #' @keywords datasets
 #'
 "lego_sample"
