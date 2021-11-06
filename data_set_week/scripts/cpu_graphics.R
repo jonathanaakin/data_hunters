@@ -5,6 +5,7 @@ library(lubridate)
 library(forcats)
 library(tidyr)
 library(openintro)
+library(kableExtra)
 
 #-------------------------------------------------------------------------------
 
@@ -54,21 +55,50 @@ consumer <- cpu %>%
     threads > cores ~ "yes",
     threads == cores ~ "no"
   ),
-  yr = year(released))
+  yr = year(released)) %>% 
+  pivot_longer(cols = c("base_clock", "boost_clock"), names_to = "clock_type", 
+               values_to = "clock_speed")
 
-ggplot(consumer, aes(base_clock, company))+
-  geom_boxplot()+
+consumer_base <- consumer %>% 
+  filter(clock_type == "base_clock")
+
+consumer_boost <- consumer %>% 
+  filter(clock_type == "boost_clock")
+
+ggplot()+
+  geom_boxplot(consumer, 
+               mapping = aes(clock_speed, clock_type, color = hyper_threading))+
   stat_summary(fun = mean, geom = "point", col = "blue")+
   stat_summary(fun = mean, geom = "text", col = "blue", vjust = -1,
                aes(label = paste("Mean:", round(..x.., digits = 4))))+
-  facet_wrap(~yr)
+  labs(
+    title = "Are multithreaded processors faster?",
+    x = "Processor Speed (GHz)", 
+    y = "",
+    color = "Multithreaded?"
+  )+
+  scale_y_discrete(labels = c("Boost clock", "Base clock"))+
+  scale_color_manual(values = c(IMSCOL["pink", "full"], IMSCOL["blue", "full"]), 
+                     labels = c("No", "Yes"))+
+  theme_minimal()
+
+ggsave(here::here("data_set_week/images/cpu_boxplot.png"))
 
 
+# Hyper threading does not affect base clock but it does affect the boost clock!
+# as anova
+summary(aov(clock_speed ~ hyper_threading, data = consumer))
 
-summary(aov(base_clock ~ factor(cores), data = core))
+# as t-test
 
+infer::t_test(consumer_base, clock_speed ~ hyper_threading,
+              order = c("yes", "no")) %>% 
+  kbl(linesep = "", booktabs = TRUE, align = "lcccccc", caption = "") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                latex_options = c("striped", "hold_position"))
 
-
-
-
-
+infer::t_test(consumer_boost, clock_speed ~ hyper_threading,
+              order = c("yes", "no"))%>% 
+  kbl(linesep = "", booktabs = TRUE, align = "lcccccc", caption = "") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                latex_options = c("striped", "hold_position"))
