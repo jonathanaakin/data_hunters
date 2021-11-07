@@ -11,9 +11,9 @@
 #'   \item{x}{Values for x.}
 #'   \item{y}{Values for y.}
 #'   }
-#' @source The data sets were created by Justin Matejka and George Fitzmaurice (see \url{https://www.autodesk.com/research/publications/same-stats-different-graphs}), inspired by the datasaurus set from Alberto Cairo (see \url{http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html}). The data can also be found in the `datasauRus` package, and it is released under an \href{MIT license}{https://cran.r-project.org/web/licenses/MIT} with additional details in \href{this LICENSE files}{https://cran.r-project.org/web/packages/datasauRus/LICENSE}.
+#' @source The data sets were created by Justin Matejka and George Fitzmaurice (see \url{https://www.autodesk.com/research/publications/same-stats-different-graphs}), inspired by the datasaurus set from Alberto Cairo (see \url{http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html}). The data can also be found in the [`datasauRus` package](https://cran.r-project.org/web/packages/datasauRus/index.html) ([License](https://cran.r-project.org/web/licenses/MIT), [copyright]( https://cran.r-project.org/web/packages/datasauRus/LICENSE)).
 #' @references Justin Matejka and George Fitzmaurice. 2017. Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing. Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems. Association for Computing Machinery, New York, NY, USA, 1290-1294. DOI: \url{https://doi.org/10.1145/3025453.3025912}.
-#' @keywords datasets
+#' @keywords datasets  
 #' @examples
 #' library(dplyr)
 #' library(ggplot2)

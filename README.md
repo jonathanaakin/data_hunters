@@ -12,7 +12,7 @@ Our role is to collect and cultivate supplemental data sets for use in the `open
 --------------
 We will follow the process for adding new data outlined below and modified from the `openintro` package.
 
-If you are a better visual learner, there is a screencast linked at the bottom of this page.
+If you are a better visual learner, there is a screencast linked at the bottom of this page. Those new to GitHub and/or contributing to open source projects via on GitHub may wish to complete [this tutorial](https://npaterno.github.io/left_coast_stats/open_source_workflow.html) to get more comforable with the general process. 
  
 The following steps use the **devtools** and **usethis** packages for
 various steps. We recommend using this process when suggesting new
@@ -54,7 +54,8 @@ discussion before making the pull request.
     help.
 10. Commit the changes made in the git tab of RStudio.
 11. Run `usethis::pr_push()` to submit the pull request. This will open a new tab in your browser with a pull request form filled out in GitHub. Submit the request by pressing the green "Create pull request" button. After the request had been merged, run `usethis::pr_finish()`.
-12. Please DO NOT edit the description or namespace files.
+12. Once the PR is finished, write a short blog post about the data set for future publication on the OpenIntro blog. See an example [here](https://www.openintro.org/blog/article/2021-10-03-data-set-fatal_police_shootings/).
+13. Please DO NOT edit the description or namespace files.
 
 # Getting GitHub and RStudio to Sync
 ------------------------------------

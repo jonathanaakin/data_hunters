@@ -13,7 +13,7 @@ A data frame with 1846 observations of 3 variables.
 }
 }
 \source{
-The data sets were created by Justin Matejka and George Fitzmaurice (see \url{https://www.autodesk.com/research/publications/same-stats-different-graphs}), inspired by the datasaurus set from Alberto Cairo (see \url{http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html}). The data can also be found in the \code{datasauRus} package, and it is released under an \href{MIT license}{https://cran.r-project.org/web/licenses/MIT} with additional details in \href{this LICENSE files}{https://cran.r-project.org/web/packages/datasauRus/LICENSE}.
+The data sets were created by Justin Matejka and George Fitzmaurice (see \url{https://www.autodesk.com/research/publications/same-stats-different-graphs}), inspired by the datasaurus set from Alberto Cairo (see \url{http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html}). The data can also be found in the \href{https://cran.r-project.org/web/packages/datasauRus/index.html}{\code{datasauRus} package} (\href{https://cran.r-project.org/web/licenses/MIT}{License}, \href{https://cran.r-project.org/web/packages/datasauRus/LICENSE}{copyright}).
 }
 \usage{
 datasaurus
