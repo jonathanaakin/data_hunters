@@ -1,53 +1,12 @@
 library(dplyr)
 library(ggplot2)
-library(stringr)
 library(lubridate)
-library(forcats)
 library(tidyr)
 library(openintro)
 library(kableExtra)
+library(patchwork)
 
 #-------------------------------------------------------------------------------
-
-core <- cpu %>% 
-  filter(str_detect(name, "Core")==TRUE) %>% 
-  separate(name, into = c("level", "series", "gen")) %>% 
-  separate(gen, into = c("model", "suffix"), sep = "(?<=[0-9])(?=[A-Za-z])") %>%
-  filter(series != "M" & series != "m3") %>% 
-  mutate(gen = case_when(
-    str_detect(model, "^2[0-9]{3}") ~ "Second",
-    str_detect(model, "^3[0-9]{3}") ~ "Third",
-    str_detect(model, "^4[0-9]{3}") ~ "Fourth",
-    str_detect(model, "^5[0-9]{3}") ~ "Fifth",
-    str_detect(model, "^6[0-9]{3}") ~ "Sixth",
-    str_detect(model, "^7[0-9]{3}") ~ "Seventh",
-    str_detect(model, "^8[0-9]{3}") ~ "Eighth",
-    str_detect(model, "^9[0-9]{3}") ~ "Ninth",
-    str_detect(model, "^10[0-9]{2,3}") ~ "Tenth",
-    TRUE ~ "First"
-  ),
-  platform = case_when(
-    str_detect(suffix, "U$") == TRUE ~ "Mobile",
-    str_detect(suffix, "H$") == TRUE ~ "Mobile",
-    str_detect(suffix, "H[:upper:]$") == TRUE ~ "Mobile",
-    str_detect(suffix, "Y$") == TRUE ~ "Mobile",
-    str_detect(suffix, "M$") == TRUE ~ "Mobile",
-    str_detect(suffix, "MQ$") == TRUE ~ "Mobile",
-    str_detect(suffix, "MX$") == TRUE ~ "Mobile",
-    str_detect(suffix, "EQ$") == TRUE ~ "Mobile",
-    str_detect(suffix, "G[:digit:]$") == TRUE ~ "Mobile",
-    TRUE ~ "Desktop"
-    )) %>% 
-  mutate(gen = fct_relevel(gen, c("First", "Second", "Third" ,"Fourth", "Fifth",
-                                  "Sixth", "Seventh", "Eighth", "Ninth","Tenth"
-                                  )))
-
-test <- core %>% 
-  group_by(series,gen) %>% 
-  summarize(mean = mean(cores))
-
-ggplot(test, aes(gen, mean, fill = series))+
-  geom_col(position = "dodge")
 
 consumer <- cpu %>% 
   filter(threads <= 64 & socket != "PCIe x16") %>% 
@@ -68,9 +27,6 @@ consumer_boost <- consumer %>%
 ggplot()+
   geom_boxplot(consumer, 
                mapping = aes(clock_speed, clock_type, color = hyper_threading))+
-  stat_summary(fun = mean, geom = "point", col = "blue")+
-  stat_summary(fun = mean, geom = "text", col = "blue", vjust = -1,
-               aes(label = paste("Mean:", round(..x.., digits = 4))))+
   labs(
     title = "Are multithreaded processors faster?",
     x = "Processor Speed (GHz)", 
@@ -102,3 +58,85 @@ infer::t_test(consumer_boost, clock_speed ~ hyper_threading,
   kbl(linesep = "", booktabs = TRUE, align = "lcccccc", caption = "") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"),
                 latex_options = c("striped", "hold_position"))
+
+# Show alternate cause of increase in boost clock with hyper threading
+time_series <- consumer %>% 
+  mutate(year_released = year(released)) %>% 
+  count(year_released, hyper_threading) %>% 
+  na.omit() %>% 
+  group_by(year_released) %>% 
+  mutate(prop = n/sum(n)) 
+
+ggplot(time_series, aes(factor(year_released), prop, fill = hyper_threading))+
+  geom_col(position = "dodge")+
+  labs(
+    title = "Proportion of processors with multithreading",
+    subtitle = "by year released",
+    x = "Year",
+    y = "Number of Processors", 
+    fill = "Multithreaded?"
+  )+
+  scale_fill_manual(values = c(IMSCOL["pink", "full"], IMSCOL["blue", "full"]), 
+                     labels = c("No", "Yes"))+
+  theme_minimal()
+
+ggsave(here::here("data_set_week/images/cpu_time-series_col.png"))
+
+plot_data_2 <- cpu %>% 
+  group_by(process) %>% 
+  summarize(mean_boost = mean(boost_clock, na.rm = TRUE)) %>% 
+  filter(mean_boost > 2)
+
+plot_1 <- ggplot(plot_data_2, aes(process, mean_boost))+
+  geom_point(color = IMSCOL["blue", "full"])+
+  labs(
+    title = "Average boost clock increases as the size \nof the process node decreases",
+    x = "Process Node Size (nm)",
+    y = "Average Boost Clock (GHz)"
+  )
+
+plot_data_3 <- cpu %>% 
+  mutate(year_released = year(released)) %>% 
+  na.omit() %>% 
+  group_by(year_released) %>% 
+  summarize(mean_process = mean(process, na.rm = TRUE))
+
+plot_2 <- ggplot(plot_data_3, aes(factor(year_released), mean_process))+
+  geom_point(color = IMSCOL["blue", "full"])+
+  labs(
+    title = "Average process node size has been decreasing \nsteadily",
+    x = "Year Released",
+    y = "Average Process Node Size (nm)"
+  )
+
+plot_1 + plot_2 
+  
+plot_data_4 <- cpu %>%
+  mutate(year_released = year(released),) %>% 
+  na.omit() %>% 
+  group_by(year_released) %>% 
+  summarize(mean_process = mean(process, na.rm = TRUE),
+            mean_boost = mean(boost_clock, na.rm = TRUE))
+
+ggplot(plot_data_4, aes(factor(year_released), mean_process, size = mean_boost))+
+  geom_point(color = IMSCOL["blue", "full"])+
+  labs(
+    title = "Average process node size has been decreasing steadily",
+    x = "Year Released",
+    y = "Average Process Node Size (nm)", 
+    size = "Average Boost Clock (GHz)"
+  )+
+  theme_minimal()
+
+ggsave(here::here("data_set_week/images/cpu_boost-node-year_scatter.png"))
+
+ggplot(cpu, aes(factor(year(released)), process, size = boost_clock))+
+  geom_jitter(color = IMSCOL["blue", "full"], alpha = 0.7)+
+  labs(
+    title = "The size of the process node has been decreasing over time in 
+    conjunction with an increase in boost clock",
+    x = "Year Released",
+    y = "Process Node Size (nm)", 
+    size = "Boost Clock (GHz)"
+  )+
+  theme_minimal()
