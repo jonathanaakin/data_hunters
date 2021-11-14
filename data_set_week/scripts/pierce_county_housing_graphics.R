@@ -1,5 +1,5 @@
 library(dplyr)
-library(openintro)
+library(usdata)
 library(ggplot2)
 
 plot_data <- pierce_county_house_sales %>% 
