@@ -1,0 +1,27 @@
+#' Dengue Vaccine
+#'
+#' Results from an early trial for a vaccine for Dengue fever.
+#' Patients were randomized into two groups. Patients in the
+#' treatment group received the vaccine, and those in the control
+#' group received a placebo. After 6 months, each patient was
+#' injected with a weaker virus of Dengue. Researchers subsequently
+#' took blood measurements, inspecting if any virus was present,
+#' and also reported if any rash developed.
+#'
+#'
+#' @format A data frame with 30 rows and 2 variables.
+#' \describe{
+#'   \item{condition}{What the patient received, either the vaccine
+#'     or a placebo.}
+#'   \item{virus_in_blood}{Whether a patient had Dengue virus present
+#'     in her / his blood.}
+#'   \item{develop_rash}{Whether a patient developed a rash.}
+#' }
+#' @examples
+#' table(dengue[, c(1, 2)])
+#' table(dengue[, c(1, 3)])
+#'
+#' @source
+#'   {Hayden EC. 2016. Dengue vaccine aces trailblazing trial. Nature. \url{https://doi.org/10.1038/nature.2016.19576}}
+#'
+"dengue"
