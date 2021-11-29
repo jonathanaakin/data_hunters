@@ -79,5 +79,4 @@
 #' abline(m)
 #' @source
 #'   This is an original data set by OpenIntro that was collected in 2016.
-#'
 "pokemon_go"
