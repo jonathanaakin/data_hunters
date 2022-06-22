@@ -7,7 +7,7 @@ library(tidyr)
 
 # get initial data
 
-raw_data <- read_spss("memory.sav")
+raw_data <- read_spss(here::here("data-raw/lecture_learning/memory.sav"))
 
 # remove all attributes imported from spss using zap_ functions
 
@@ -89,11 +89,9 @@ lecture_learning <- lecture_learning %>%
     Motivation_both == 1 ~ "Video",
     Motivation_both == 2 ~ "Live",
     Motivation_both == 3 ~ "Equally Motivated")
- )
+ ) %>% 
+  janitor::clean_names()
     
 # save
 
 usethis::use_data(lecture_learning, overwrite = TRUE)
-
-
-
